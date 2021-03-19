@@ -1,0 +1,10 @@
+
+# pyenv-virtualenv:
+eval "$(pyenv init -)" 
+eval "$(pyenv virtualenv-init -)" 
+
+# save python virtualenvs here
+export WORKON_HOME=~/.virtualenvs
+ 
+# activate virtualenvwrapper shell functions
+source /usr/local/bin/virtualenvwrapper.sh
