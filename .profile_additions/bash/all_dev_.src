@@ -1,0 +1,3 @@
+. ${HOME}/.profile_additions/bash/javadev
+. ${HOME}/.profile_additions/bash/nodedev
+. ${HOME}/.profile_additions/bash/pydev

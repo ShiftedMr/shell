@@ -1,0 +1,25 @@
+# functions to be used in bash
+jwtd() {
+    if [[ -x $(command -v jq) ]]; then
+         jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<< "${1}"
+         echo "Signature: $(echo "${1}" | awk -F'.' '{print $3}')"
+    fi
+}
+
+histbackup() {
+    histpath="${HOME}/.profile_additions/history_backup"
+    if [[ -d ${HOME}/.profile_additions && ! -d $histpath ]]; then
+        mkdir -p $histpath
+        export FREDDEBUG2=92
+        export FREDPATH="$histpath"
+        echo "backupcreated"
+    fi
+    echo "postbackup"
+    echo "histb $histpath"
+    cur_date_string=$(date +%Y-%m-%d)
+    cur_date_file="$histpath/$cur_date_string.${SHELL/*\//}.history"
+    if [[ ! -f $cur_date_file ]]; then
+      cp ${HISTFILE:-"${HOME}/.bash_history"} $cur_date_file
+      export FREDDEBUG=29
+    fi
+}
