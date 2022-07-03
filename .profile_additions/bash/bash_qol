@@ -33,6 +33,5 @@ man() {
 
 # Backing up history file once a day
 if eval "type -t histbackup >>/dev/null"; then
-  export FREDDEBUG=28
   alias hist="histbackup && history"
 fi

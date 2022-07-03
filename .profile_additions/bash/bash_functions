@@ -10,8 +10,6 @@ histbackup() {
     histpath="${HOME}/.profile_additions/history_backup"
     if [[ -d ${HOME}/.profile_additions && ! -d $histpath ]]; then
         mkdir -p $histpath
-        export FREDDEBUG2=92
-        export FREDPATH="$histpath"
         echo "backupcreated"
     fi
     echo "postbackup"
@@ -20,6 +18,5 @@ histbackup() {
     cur_date_file="$histpath/$cur_date_string.${SHELL/*\//}.history"
     if [[ ! -f $cur_date_file ]]; then
       cp ${HISTFILE:-"${HOME}/.bash_history"} $cur_date_file
-      export FREDDEBUG=29
     fi
 }

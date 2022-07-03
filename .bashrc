@@ -122,6 +122,5 @@ fi
 
 # PROFILE_ADDITIONS Auto Import Must be last thing in case any aliases conflict with above
 if [[ -d ${HOME}/.profile_additions ]]; then
-  export FREDDEBUG=27
   . ~/.profile_additions/source_me.sh
 fi
