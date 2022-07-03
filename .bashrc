@@ -92,7 +92,12 @@ function __prompt_command() {
     else
       PS1+="$BBlu$timestamp$RCol$BYel$star $BGrn$dateee$RCol"
     fi
-    export PS1+="\n$username@$hostname:$BBlu\w$BPur$(parse_git_branch)$RCol\n$"
+    if test -z "$VIRTUAL_ENV" ; then
+      PYTHON_VIRTUALENV=""
+    else
+      PYTHON_VIRTUALENV="${BYel}[`basename \"$VIRTUAL_ENV\"`]${RCol}"
+    fi
+    export PS1+="\n${PYTHON_VIRTUALENV} $username@$hostname:$BBlu\w$BPur$(parse_git_branch)$RCol\n$"
 }
 
 
