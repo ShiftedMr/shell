@@ -64,10 +64,13 @@ function __exit_stat() {
   echo $stat
 }
 
-export PROMPT_COMMAND="__prompt_command $(__exit_stat)"# Func to gen PS1 after CMDs
+export PROMPT_COMMAND="export lastcode=$?;__prompt_command"# Func to gen PS1 after CMDs
+parse_git_branch() {
+         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
 
 function __prompt_command() {
-    local Exit="$1"
+    local Exit="$lastcode"
     PS1="\n"
     local RCol='\[\e[0m\]'
     local Red='\[\e[0;31m\]'
@@ -89,7 +92,7 @@ function __prompt_command() {
     local username="$DGry\u$RCol"
     local hostname="$BYel\h$RCol"
 
-    if [ $? != 0 ]; then
+    if [ $EXIT != 0 ]; then
       PS1+="$BRed$timestamp$RCol$BYel$star$RCol $BGry$dateee$RCol"
     else
       PS1+="$BBlu$timestamp$RCol$BYel$star $BGrn$dateee$RCol"
