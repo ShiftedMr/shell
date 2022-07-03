@@ -58,19 +58,14 @@ export HISTFILE=${HOME}/.bash_eternal_history
 #     fi
 # fi
 
+export PROMPT_COMMAND='export last_exit="$?"; history -a; history -c; history -r; __prompt_command $last_exit'
 
-function __exit_stat() {
-  stat=$?;
-  echo $stat
-}
-
-export PROMPT_COMMAND="export lastcode=$?;__prompt_command"# Func to gen PS1 after CMDs
-parse_git_branch() {
+function parse_git_branch() {
          git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
 function __prompt_command() {
-    local Exit="$lastcode"
+    local Exit=$1
     PS1="\n"
     local RCol='\[\e[0m\]'
     local Red='\[\e[0;31m\]'
@@ -92,17 +87,13 @@ function __prompt_command() {
     local username="$DGry\u$RCol"
     local hostname="$BYel\h$RCol"
 
-    if [ $EXIT != 0 ]; then
+    if [[ ! "$Exit" -eq "0" ]]; then
       PS1+="$BRed$timestamp$RCol$BYel$star$RCol $BGry$dateee$RCol"
     else
       PS1+="$BBlu$timestamp$RCol$BYel$star $BGrn$dateee$RCol"
     fi
-
-    #PS1+="{RCol}@${BBlu}\h ${Pur}\W${BYel}$ ${RCol}"
-    PS1+="\n${debian_chroot:+($debian_chroot)}$username@$hostname:$BBlu\w$RCol\n\$"
+    export PS1+="\n$username@$hostname:$BBlu\w$BPur$(parse_git_branch)$RCol\n$"
 }
-
-unset color_prompt force_color_prompt
 
 
 # Alias definitions.
@@ -121,12 +112,11 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 
 
 # PROFILE_ADDITIONS Auto Import Must be last thing in case any aliases conflict with above
 if [[ -d ${HOME}/.profile_additions ]]; then
   export FREDDEBUG=27
-  . ${HOME}/.profile_additions/source_me.sh
+  . ~/.profile_additions/source_me.sh
 fi
